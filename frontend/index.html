@@ -2,31 +2,136 @@
 <html>
 <head>
     <title>TravelMate</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            text-align: center;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            margin: 40px auto;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #007bff;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>TravelMate</h1>
-    <p>Your Smart Travel Planning Companion</p>
+<div class="container">
+    <h1>✈️ TravelMate</h1>
 
-    <hr>
+    <input type="text" id="destination" placeholder="Enter Destination">
+    <input type="number" id="days" placeholder="Number of Days">
+    <input type="number" id="budget" placeholder="Budget (₹)">
 
-    <h2>Search Your Destination</h2>
+    <button onclick="planTrip()">Plan Trip</button>
 
-    <input type="text" placeholder="Enter destination">
-    <button>Search</button>
+    <div id="output" class="result"></div>
+</div>
 
-    <hr>
+<script>
+function planTrip() {
+    let destination = document.getElementById("destination").value;
+    let days = document.getElementById("days").value;
+    let budget = document.getElementById("budget").value;
 
-    <h2>Features</h2>
+    if (!destination || !days || !budget) {
+        alert("Fill all fields!");
+        return;
+    }
 
-    <ul>
-        <li>Travel Itinerary</li>
-        <li>Budget Estimator</li>
-        <li>Nearby Attractions</li>
-        <li>Food Recommendations</li>
-        <li>Best Time to Visit</li>
-        <li>Packing Essentials</li>
-    </ul>
+    let daily = Math.floor(budget / days);
+
+    let stay = Math.floor(budget * 0.4);
+    let food = Math.floor(budget * 0.3);
+    let travel = Math.floor(budget * 0.3);
+
+    let itinerary = "";
+    for (let i = 1; i <= days; i++) {
+        itinerary += "<li>Day " + i + ": Explore " + destination + "</li>";
+    }
+
+    let checklist = `
+        <ul>
+            <li>Clothes 👕</li>
+            <li>ID Card 🪪</li>
+            <li>Charger 🔌</li>
+            <li>Cash 💵</li>
+        </ul>
+    `;
+
+    document.getElementById("output").innerHTML = `
+        <div class="card">
+            <h3>📍 ${destination}</h3>
+            <p>🗓️ ${days} days</p>
+            <p>💰 Total Budget: ₹${budget}</p>
+            <p>📊 Daily Budget: ₹${daily}</p>
+        </div>
+
+        <div class="card">
+            <h3>💸 Budget Breakdown</h3>
+            <p>🏨 Stay: ₹${stay}</p>
+            <p>🍽️ Food: ₹${food}</p>
+            <p>🚕 Travel: ₹${travel}</p>
+        </div>
+
+        <div class="card">
+            <h3>📅 Itinerary</h3>
+            <ul>${itinerary}</ul>
+        </div>
+
+        <div class="card">
+            <h3>🧳 Checklist</h3>
+            ${checklist}
+        </div>
+    `;
+}
+</script>
 
 </body>
-</html> 
+</html>
