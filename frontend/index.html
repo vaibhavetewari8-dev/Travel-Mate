@@ -6,114 +6,125 @@
     <style>
         body {
             font-family: Arial;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            text-align: center;
+            background: linear-gradient(to right, #667eea, #764ba2);
             margin: 0;
+            text-align: center;
+            color: white;
         }
 
         .container {
             background: white;
-            padding: 20px;
-            margin: 40px auto;
+            color: black;
             width: 90%;
             max-width: 400px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
         }
 
-        h1 {
-            color: #333;
-        }
-
-        input {
+        input, select {
             width: 90%;
             padding: 10px;
-            margin: 10px;
+            margin: 8px;
             border-radius: 6px;
-            border: 1px solid #ccc;
         }
 
         button {
-            padding: 10px 20px;
-            background: #4facfe;
+            padding: 10px;
+            background: #667eea;
             color: white;
             border: none;
             border-radius: 6px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #007bff;
-        }
-
-        .result {
-            margin-top: 20px;
-            text-align: left;
         }
 
         .card {
-            background: #f9f9f9;
+            background: #f4f4f4;
             padding: 10px;
             margin-top: 10px;
             border-radius: 8px;
+            text-align: left;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 8px;
         }
     </style>
+
 </head>
 
 <body>
 
+<h1>🌍 TravelMate</h1>
+
 <div class="container">
-    <h1>✈️ TravelMate</h1>
 
     <input type="text" id="destination" placeholder="Enter Destination">
-    <input type="number" id="days" placeholder="Number of Days">
-    <input type="number" id="budget" placeholder="Budget (₹)">
+    <input type="number" id="days" placeholder="Days">
+    <input type="number" id="budget" placeholder="Budget ₹">
 
-    <button onclick="planTrip()">Plan Trip</button>
+    <select id="type">
+        <option value="">Travel Type</option>
+        <option value="solo">Solo</option>
+        <option value="family">Family</option>
+        <option value="friends">Friends</option>
+    </select>
 
-    <div id="output" class="result"></div>
+    <button onclick="planTrip()">Plan Trip 🚀</button>
+
+    <div id="output"></div>
+
 </div>
 
 <script>
-function planTrip() {
-    let destination = document.getElementById("destination").value;
-    let days = document.getElementById("days").value;
-    let budget = document.getElementById("budget").value;
 
-    if (!destination || !days || !budget) {
-        alert("Fill all fields!");
+function planTrip() {
+
+    let dest = document.getElementById("destination").value;
+    let days = parseInt(document.getElementById("days").value);
+    let budget = parseInt(document.getElementById("budget").value);
+    let type = document.getElementById("type").value;
+
+    if (!dest || !days || !budget || !type) {
+        alert("Fill all details!");
         return;
     }
 
     let daily = Math.floor(budget / days);
 
+    // ✅ STATIC IMAGES (WORK EVERYWHERE)
+    let mainImg = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e";
+    let foodImg = "https://images.unsplash.com/photo-1504674900247-0877df9cc836";
+    let travelImg = "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800";
+
+    let places = {
+        solo: ["Cafe ☕", "Museum 🏛️", "Nature 🌿"],
+        family: ["Park 🌳", "Zoo 🐘", "Temple 🛕"],
+        friends: ["Beach 🏖️", "Club 🎉", "Adventure 🎢"]
+    };
+
+    let itinerary = "";
+    for (let i = 1; i <= days; i++) {
+        let place = places[type][i % 3];
+        itinerary += "<li>Day " + i + ": Visit " + place + "</li>";
+    }
+
     let stay = Math.floor(budget * 0.4);
     let food = Math.floor(budget * 0.3);
     let travel = Math.floor(budget * 0.3);
 
-    let itinerary = "";
-    for (let i = 1; i <= days; i++) {
-        itinerary += "<li>Day " + i + ": Explore " + destination + "</li>";
-    }
-
-    let checklist = `
-        <ul>
-            <li>Clothes 👕</li>
-            <li>ID Card 🪪</li>
-            <li>Charger 🔌</li>
-            <li>Cash 💵</li>
-        </ul>
-    `;
-
     document.getElementById("output").innerHTML = `
+
         <div class="card">
-            <h3>📍 ${destination}</h3>
-            <p>🗓️ ${days} days</p>
-            <p>💰 Total Budget: ₹${budget}</p>
+            <img src="${mainImg}">
+            <h3>📍 ${dest}</h3>
+            <p>🗓️ ${days} Days</p>
+            <p>💰 ₹${budget}</p>
             <p>📊 Daily Budget: ₹${daily}</p>
         </div>
 
         <div class="card">
+            <img src="${travelImg}">
             <h3>💸 Budget Breakdown</h3>
             <p>🏨 Stay: ₹${stay}</p>
             <p>🍽️ Food: ₹${food}</p>
@@ -126,11 +137,24 @@ function planTrip() {
         </div>
 
         <div class="card">
-            <h3>🧳 Checklist</h3>
-            ${checklist}
+            <img src="${foodImg}">
+            <h3>🍜 Food Suggestions</h3>
+            <p>Explore local food in ${dest}</p>
         </div>
+
+        <div class="card">
+            <h3>🧳 Essentials</h3>
+            <ul>
+                <li>👕 Clothes</li>
+                <li>🪪 ID Proof</li>
+                <li>🔌 Charger</li>
+                <li>💵 Cash</li>
+            </ul>
+        </div>
+
     `;
 }
+
 </script>
 
 </body>
