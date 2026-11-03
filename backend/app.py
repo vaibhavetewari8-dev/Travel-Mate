@@ -10,10 +10,6 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-if __name__ == '__main__':
-    # Debug mode ON taaki development ke time changes instantly dikhein
-    app.run(debug=True, port=5000)
-
 # Connect to the SQLite database
 def get_db_connection():
     conn = sqlite3.connect('travelmate.db')
@@ -116,4 +112,6 @@ def search_history():
     finally:
         conn.close()
 
-
+if __name__ == '__main__':
+    # Debug mode ON taaki development ke time changes instantly dikhein
+    app.run(debug=True, port=5000)
