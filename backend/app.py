@@ -1,4 +1,4 @@
-# app.py (Yuvraj)
+
 from flask import Flask, render_template
 from flask import request, jsonify
 import sqlite3
