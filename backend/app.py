@@ -18,6 +18,22 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def init_db():
+    conn = get_db_connection()
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS search_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            distance REAL NOT NULL,
+            fare REAL NOT NULL,
+            search_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+    
+
 # API endpoint to save search details
 @app.route('/api/save_search', methods=['POST'])
 def save_search():
@@ -114,6 +130,5 @@ def search_history():
         conn.close()
 
 if __name__ == '__main__':
-   
+    init_db()
     app.run(debug=True, port=5000)
-
