@@ -2,7 +2,6 @@
 from flask import Flask, render_template
 from flask import request, jsonify
 import sqlite3
-
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -117,3 +116,4 @@ def search_history():
 if __name__ == '__main__':
    
     app.run(debug=True, port=5000)
+
