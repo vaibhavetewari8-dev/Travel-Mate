@@ -11,12 +11,12 @@ app = Flask(__name__, template_folder=os.path.join(BASE_DIR, '..', 'frontend'))
 def home():
     return render_template('index.html')
 
-# Connect to the SQLite database
+DB_PATH = os.path.join(BASE_DIR, '..', 'database', 'travelmate.db')
+
 def get_db_connection():
-    conn = sqlite3.connect('../database/database.sq1')
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
-
 
 # API endpoint to save search details
 @app.route('/api/save_search', methods=['POST'])
