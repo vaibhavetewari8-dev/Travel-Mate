@@ -13,7 +13,7 @@ def home():
 
 # Connect to the SQLite database
 def get_db_connection():
-    conn = sqlite3.connect('travelmate.db')
+    conn = sqlite3.connect('../database/database.sq1')
     conn.row_factory = sqlite3.Row
     return conn
 
