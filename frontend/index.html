@@ -1,1 +1,60 @@
-<h1>TravelMate is Running!</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelMate</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; text-align: center; background: #f4f4f9; }
+        #map { height: 60vh; width: 100%; max-width: 600px; margin: auto; border: 2px solid #ccc; border-radius: 8px; }
+        #banner { display: none; background: white; padding: 15px; margin-top: 15px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .red { color: red; font-weight: bold; }
+        .green { color: green; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <h2>TravelMate Fare Estimator</h2>
+    
+    <div id="map"></div>
+    
+    <div id="banner">
+        <p>Distance: <span id="dist"></span> km</p>
+        <p>Fair Range: <span class="green">₹<span id="fare"></span></span></p>
+        <p class="red">Do not pay more than: ₹<span id="max"></span></p>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script>
+        // Map set at Agra
+        var map = L.map('map').setView([27.1767, 78.0081], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Routing Machine
+        var control = L.Routing.control({
+            waypoints: [L.latLng(27.1751, 78.0421), L.latLng(27.1795, 78.0211)], // Taj Mahal to Agra Fort
+            routeWhileDragging: true
+        }).addTo(map);
+
+        // Fare Math Logic
+        control.on('routesfound', function(e) {
+            var dist = (e.routes[0].summary.totalDistance / 1000).toFixed(1);
+            var minFare = Math.round(30 + Math.max(0, dist - 1.5) * 14);
+            var maxFare = Math.round(30 + Math.max(0, dist - 1.5) * 18);
+            
+            document.getElementById('dist').innerText = dist;
+            document.getElementById('fare').innerText = minFare + " - " + maxFare;
+            document.getElementById('max').innerText = Math.ceil(maxFare * 1.25);
+            document.getElementById('banner').style.display = 'block';
+
+            // Send to Vaibhave's API
+            fetch('/api/save_search', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({distance: dist, fare: maxFare})
+            });
+        });
+    </script>
+</body>
+</html>
