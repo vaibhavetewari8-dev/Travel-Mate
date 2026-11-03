@@ -3,9 +3,11 @@ from flask import Flask, render_template
 from flask import request, jsonify
 import sqlite3
 
-app = Flask(__name__)
+import os
 
-# Main route jo Shreya ka frontend render karega
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, template_folder=os.path.join(BASE_DIR, '..', 'frontend'))
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -113,5 +115,5 @@ def search_history():
         conn.close()
 
 if __name__ == '__main__':
-    # Debug mode ON taaki development ke time changes instantly dikhein
+   
     app.run(debug=True, port=5000)
