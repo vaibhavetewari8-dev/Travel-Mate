@@ -1,17 +1,18 @@
-
 from flask import Flask, render_template
 from flask import request, jsonify
 import sqlite3
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__, template_folder=os.path.join(BASE_DIR, '..', 'frontend'))
+# Fixed path to point to 'templates' folder instead of looking for a 'frontend' folder outside the directory
+app = Flask(__name__, template_folder=os.path.join(BASE_DIR, 'templates'))
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-DB_PATH = os.path.join(BASE_DIR, '..', 'database', 'travelmate.db')
+# Fixed path to create the database in the current directory to avoid "folder not found" errors
+DB_PATH = os.path.join(BASE_DIR, 'travelmate.db')
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -129,6 +130,8 @@ def search_history():
     finally:
         conn.close()
 
+# Merged the duplicate runner blocks into one to fix the error
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5000)
+    # host='0.0.0.0' lagane se cloud server external browser ke liye open ho jata hai
+    app.run(host='0.0.0.0', port=5000, debug=True)
